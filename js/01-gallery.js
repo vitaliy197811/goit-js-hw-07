@@ -25,14 +25,25 @@ function clickImageGallery(e) {
     
     const sourse = e.target.dataset.sourse;
     if (!sourse) return;
-    const instance = basicLightbox.create(`<img src=${sourse} width="800" height="600">`)
-    instance.show()
     
-    gallery.addEventListener('keydown', closeImage);
+    const instance = basicLightbox.create(`<img src=${sourse} width="800" height="600">`,
+        {
+            onShow: () => {
+                window.addEventListener("keydown", closeImage);
+            },
+            onClose: () => {
+                window.removeEventListener("keydown", closeImage);
+            },
+        }
+    );
 
+    instance.show();
+    
     function closeImage(e) {
-        if (e.key === 'Escape') {
-            instance.close()
+        console.log(e);
+        if (e.code === "Escape") {
+            instance.close();
         }
     }
 }
+
